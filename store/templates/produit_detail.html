@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - MyShop{% endblock %}
+
+{% block content %}
+<section class="product-detail">
+    <div class="product-detail-image">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+            <div class="image-placeholder">
+                <span>Aucune image</span>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="product-detail-info">
+        <p class="breadcrumb">
+            <a href="{% url 'store' %}">Boutique</a>
+            <span>/</span>
+            <span>{{ product.category.name }}</span>
+        </p>
+
+        <p class="product-category">{{ product.category.name }}</p>
+
+        <h1>{{ product.name }}</h1>
+
+        <p class="detail-price">{{ product.price }} FCFA</p>
+
+        {% if product.stock > 0 and product.is_available %}
+            <p class="product-stock">En stock : {{ product.stock }}</p>
+        {% else %}
+            <p class="product-out">Rupture de stock</p>
+        {% endif %}
+
+        <div class="detail-description">
+            <h2>Description</h2>
+            <p>{{ product.description }}</p>
+        </div>
+
+        <div class="detail-actions">
+            {% if product.stock > 0 and product.is_available %}
+                <form class="add-to-cart-form" action="{% url 'add_to_cart' product.pk %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="quantity-box">
+                        <label for="quantity">Quantité</label>
+                        <input
+                            type="number"
+                            id="quantity"
+                            name="quantity"
+                            value="1"
+                            min="1"
+                            max="{{ product.stock }}"
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-large">
+                        Ajouter au panier
+                    </button>
+                </form>
+            {% else %}
+                <button class="btn btn-disabled" disabled>Indisponible</button>
+            {% endif %}
+
+            <a href="{% url 'store' %}" class="btn-secondary">
+                Retour à la boutique
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Panier - MyShop{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Votre panier</h1>
+    <p>Vérifiez vos articles avant de passer à la commande.</p>
+</section>
+
+<section class="cart-layout">
+    <div class="cart-items">
+        {% if cart_items %}
+            {% for item in cart_items %}
+                <article class="cart-item">
+                    <div class="cart-item-image">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                        {% else %}
+                            <div class="cart-placeholder">
+                                <span>Aucune image</span>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="cart-item-info">
+                        <p class="product-category">{{ item.product.category.name }}</p>
+
+                        <h2>{{ item.product.name }}</h2>
+
+                        <p class="cart-item-price">
+                            {{ item.product.price }} FCFA
+                        </p>
+
+                        <p class="cart-item-quantity">
+                            Quantité : <strong>{{ item.quantity }}</strong>
+                        </p>
+
+                        <p class="cart-item-total">
+                            Total : <strong>{{ item.total_price }} FCFA</strong>
+                        </p>
+
+                        <div class="cart-actions">
+                            <a href="{% url 'reduce_quantity' item.product.pk%}" class="cart-action-btn">-</a>
+                            <a href="{% url 'increase_quantity' item.product.pk%}" class="cart-action-btn">+</a>
+                            <a href="{% url 'delete_product' item.product.pk%}" class="cart-remove-btn">Supprimer</a>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        {% else %}
+            <div class="empty-cart">
+                <h2>Votre panier est vide</h2>
+                <p>Ajoutez des produits depuis la boutique pour commencer votre commande.</p>
+
+                <a href="{% url 'store' %}" class="btn">
+                    Retour à la boutique
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if cart_items %}
+        <aside class="cart-summary">
+            <h2>Résumé</h2>
+
+            <div class="summary-row">
+                <span>Articles</span>
+                <strong>{{ cart_count }}</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Sous-total</span>
+                <strong>{{ cart_total }} FCFA</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Livraison</span>
+                <strong>À confirmer</strong>
+            </div>
+
+            <div class="summary-total">
+                <span>Total</span>
+                <strong>{{ cart_total }} FCFA</strong>
+            </div>
+
+            <a href="{% url 'checkout' %}" class="btn checkout-btn">
+                Passer la commande
+            </a>
+
+            <a href="{% url 'store' %}" class="continue-link">
+                Continuer mes achats
+            </a>
+        </aside>
+    {% endif %}
+</section>
+{% endblock %}

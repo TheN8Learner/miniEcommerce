@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Commande confirmée - MyShop{% endblock %}
+
+{% block content %}
+<section class="success-page">
+    <div class="success-card">
+        <div class="success-icon">✅</div>
+
+        <h1>Commande confirmée</h1>
+
+        <p>
+            Merci pour votre commande. Nous vous contacterons bientôt pour confirmer la livraison.
+        </p>
+
+        <div class="success-actions">
+            <a href="{% url 'store' %}" class="btn">
+                Retour à la boutique
+            </a>
+
+            <a href="{% url 'cart' %}" class="btn-secondary">
+                Voir le panier
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

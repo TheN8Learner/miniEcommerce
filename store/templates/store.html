@@ -1,13 +1,46 @@
 {% extends 'base.html' %}
 
-{% block title %}Boutique - Bienvenue{% endblock %}
+{% block title %}Boutique - MyShop{% endblock %}
 
 {% block content %}
-<div class="store-container text-center">
-    <h1 class="store-title">Bienvenue dans la boutique</h1>
-    <p class="lead mb-4">Explorez nos produits sélectionnés avec soin.</p>
-    <img src="https://via.placeholder.com/400x200" class="img-fluid rounded mb-4" alt="Boutique">
-    <br>
-    <a href="#" class="btn btn-primary btn-custom text-white">Découvrir le catalogue</a>
-</div>
+<section class="page-header">
+    <h1>Bienvenue dans la boutique</h1>
+    <p>Découvrez nos produits disponibles.</p>
+</section>
+
+<section class="products-grid">
+    {% for product in products %}
+        <article class="product-card">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% endif %}
+
+            <div class="product-card-body">
+                <p class="product-category">{{ product.category.name }}</p>
+
+                <h2>{{ product.name }}</h2>
+
+                <p class="product-description">
+                    {{ product.description|truncatewords:18 }}
+                </p>
+
+                <p class="product-price">
+                    {{ product.price }} FCFA
+                </p>
+
+                {% if product.stock > 0 %}
+                    <p class="product-stock">En stock : {{ product.stock }}</p>
+                {% else %}
+                    <p class="product-out">Rupture de stock</p>
+                {% endif %}
+
+                <a class="btn" href="{% url 'produit_detail' product.pk %}">
+                    Voir le produit
+                </a>
+            </div>
+        </article>
+    {% empty %}
+        <p>Aucun produit disponible pour le moment.</p>
+    {% endfor %}
+</section>
 {% endblock %}

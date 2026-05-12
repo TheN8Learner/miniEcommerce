@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Passer commande - MyShop{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Passer commande</h1>
+    <p>Vérifiez votre panier et renseignez vos informations de livraison.</p>
+</section>
+
+<section class="checkout-layout">
+    <div class="checkout-form-card">
+        <h2>Informations client</h2>
+
+        <form action="{% url 'checkout_success' %}" method="post>
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="full_name">Nom complet</label>
+                <input type="text" id="full_name" name="full_name" placeholder="Votre nom complet" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Adresse email</label>
+                <input type="email" id="email" name="email" placeholder="votreemail@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Téléphone</label>
+                <input type="text" id="phone" name="phone" placeholder="+221 77 000 00 00" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Adresse de livraison</label>
+                <textarea id="address" name="address" rows="4" placeholder="Votre adresse complète" required></textarea>
+            </div>
+
+            <button type="submit" class="btn checkout-submit">
+                Confirmer la commande
+            </button>
+        </form>
+    </div>
+
+    <aside class="checkout-summary">
+        <h2>Résumé de la commande</h2>
+
+        {% if cart_items %}
+            <div class="checkout-items">
+                {% for item in cart_items %}
+                    <div class="checkout-item">
+                        <div>
+                            <h3>{{ item.product.name }}</h3>
+                            <p>Quantité : {{ item.quantity }}</p>
+                        </div>
+
+                        <strong>{{ item.total_price }} FCFA</strong>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="summary-row">
+                <span>Articles</span>
+                <strong>{{ cart_count }}</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Sous-total</span>
+                <strong>{{ cart_total }} FCFA</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Livraison</span>
+                <strong>À confirmer</strong>
+            </div>
+
+            <div class="summary-total">
+                <span>Total</span>
+                <strong>{{ cart_total }} FCFA</strong>
+            </div>
+
+            <a href="{% url 'cart' %}" class="continue-link">
+                Modifier le panier
+            </a>
+        {% else %}
+            <div class="empty-cart">
+                <h2>Panier vide</h2>
+                <p>Vous devez ajouter des produits avant de passer commande.</p>
+
+                <a href="{% url 'store' %}" class="btn">
+                    Retour à la boutique
+                </a>
+            </div>
+        {% endif %}
+    </aside>
+</section>
+{% endblock %}
