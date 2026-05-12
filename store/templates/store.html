@@ -10,35 +10,37 @@
 
 <section class="products-grid">
     {% for product in products %}
-        <article class="product-card">
-            {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            {% endif %}
-
-            <div class="product-card-body">
-                <p class="product-category">{{ product.category.name }}</p>
-
-                <h2>{{ product.name }}</h2>
-
-                <p class="product-description">
-                    {{ product.description|truncatewords:18 }}
-                </p>
-
-                <p class="product-price">
-                    {{ product.price }} FCFA
-                </p>
-
-                {% if product.stock > 0 %}
-                    <p class="product-stock">En stock : {{ product.stock }}</p>
-                {% else %}
-                    <p class="product-out">Rupture de stock</p>
+        {% if product.is_available%}
+            <article class="product-card">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
                 {% endif %}
 
-                <a class="btn" href="{% url 'produit_detail' product.pk %}">
-                    Voir le produit
-                </a>
-            </div>
-        </article>
+                <div class="product-card-body">
+                    <p class="product-category">{{ product.category.name }}</p>
+
+                    <h2>{{ product.name }}</h2>
+
+                    <p class="product-description">
+                        {{ product.description|truncatewords:18 }}
+                    </p>
+
+                    <p class="product-price">
+                        {{ product.price }} FCFA
+                    </p>
+
+                    {% if product.stock > 0 %}
+                        <p class="product-stock">En stock : {{ product.stock }}</p>
+                    {% else %}
+                        <p class="product-out">Rupture de stock</p>
+                    {% endif %}
+
+                    <a class="btn" href="{% url 'produit_detail' product.pk %}">
+                        Voir le produit
+                    </a>
+                </div>
+            </article>
+        {% endif %}
     {% empty %}
         <p>Aucun produit disponible pour le moment.</p>
     {% endfor %}

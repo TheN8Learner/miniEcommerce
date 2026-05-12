@@ -121,14 +121,19 @@ def checkout(request):
     for product_id, quantity in cart.items():
         try:
             product = Product.objects.get(id=product_id)
-            total_price = product.price * quantity
-            cart_items.append({
-                "product": product,
-                "quantity": quantity,
-                "total_price": total_price,
-            })
-            cart_total += total_price
-            cart_count += quantity
+            stock = product.stock
+            if quantity <= stock:
+                total_price = product.price * quantity
+                cart_items.append({
+                    "product": product,
+                    "quantity": quantity,
+                    "total_price": total_price,
+                })
+                cart_total += total_price
+                cart_count += quantity
+            else:
+                messages.error(request, f"Stock insuffisant pour {product.name}.")
+                return redirect("cart")
         except Product.DoesNotExist:
             continue 
 
@@ -151,6 +156,8 @@ def checkout(request):
 
                         if product.stock >= qty:
                             product.stock -= qty
+                            if product.stock == 0:
+                                product.is_available = False
                             product.save()
                         else:
                             raise Exception(f"Stock insuffisant pour {product.name}")
