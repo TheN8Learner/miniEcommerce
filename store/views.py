@@ -71,13 +71,12 @@ def reduce_quantity(request, pk):
     if current_quantity > 1:
         cart[item_id] = current_quantity - 1
     else:
-        messages.error(request, message="Quantity cant be less than 0 !")
-
+        cart.pop(item_id, None)
 
     request.session["cart"] = cart
     request.session.modified = True
 
-    return redirect('cart', preserve_request=True)
+    return redirect("cart")
 
 
 def increase_quantity(request, pk):
@@ -91,27 +90,24 @@ def increase_quantity(request, pk):
     if current_quantity < product.stock:
         cart[item_id] = current_quantity + 1
     else:
-        messages.error(request, message="Quantity cant be more than stock !")
-
+        messages.error(request, "Quantité maximale disponible atteinte.")
 
     request.session["cart"] = cart
     request.session.modified = True
 
-    return redirect('cart', preserve_request=True)
+    return redirect("cart")
+
 
 def delete_product(request, pk):
     item_id = str(pk)
-    product = get_object_or_404(Product, pk=pk)
-
     cart = request.session.get("cart", {})
 
-   
     cart.pop(item_id, None)
-    
+
     request.session["cart"] = cart
     request.session.modified = True
 
-    return redirect('cart', preserve_request=True)
+    return redirect("cart")
 
 
 from django.db import transaction 
