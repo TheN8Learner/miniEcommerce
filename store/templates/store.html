@@ -10,37 +10,41 @@
 
 <section class="products-grid">
     {% for product in products %}
-        {% if product.is_available%}
-            <article class="product-card">
+        <article class="product-card">
+            <a href="{% url 'produit_detail' product.pk %}">
                 {% if product.image %}
                     <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                    <div class="product-image-placeholder">
+                        <span>Aucune image</span>
+                    </div>
                 {% endif %}
+            </a>
 
-                <div class="product-card-body">
-                    <p class="product-category">{{ product.category.name }}</p>
+            <div class="product-card-body">
+                <p class="product-category">{{ product.category.name }}</p>
 
-                    <h2>{{ product.name }}</h2>
-
-                    <p class="product-description">
-                        {{ product.description|truncatewords:18 }}
-                    </p>
-
-                    <p class="product-price">
-                        {{ product.price }} FCFA
-                    </p>
-
-                    {% if product.stock > 0 %}
-                        <p class="product-stock">En stock : {{ product.stock }}</p>
-                    {% else %}
-                        <p class="product-out">Rupture de stock</p>
-                    {% endif %}
-
-                    <a class="btn" href="{% url 'produit_detail' product.pk %}">
-                        Voir le produit
+                <h2>
+                    <a href="{% url 'produit_detail' product.pk %}">
+                        {{ product.name }}
                     </a>
+                </h2>
+
+                <p class="product-description">
+                    {{ product.description|truncatewords:14 }}
+                </p>
+
+                <div class="product-bottom">
+                    <p class="product-price">{{ product.price }} FCFA</p>
+
+                    {% if product.stock > 0 and product.is_available %}
+                        <span class="product-stock">En stock</span>
+                    {% else %}
+                        <span class="product-out">Rupture</span>
+                    {% endif %}
                 </div>
-            </article>
-        {% endif %}
+            </div>
+        </article>
     {% empty %}
         <p>Aucun produit disponible pour le moment.</p>
     {% endfor %}

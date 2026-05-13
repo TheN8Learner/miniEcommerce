@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Catégories - MyShop{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <h1>Catégories</h1>
+    <p>Parcourez les produits par catégorie.</p>
+</section>
+
+<section class="category-page-layout">
+
+    <aside class="category-sidebar">
+        <h2>Catégories</h2>
+
+        <a href="{% url 'categories' %}"
+           class="sidebar-category-link {% if not active_category %}active{% endif %}">
+            Tout
+        </a>
+
+        {% for category in categories %}
+            <a href="{% url 'products_by_category' category.pk %}"
+               class="sidebar-category-link {% if active_category and active_category.pk == category.pk %}active{% endif %}">
+                {{ category.name }}
+            </a>
+        {% empty %}
+            <p class="empty-text">Aucune catégorie.</p>
+        {% endfor %}
+    </aside>
+
+    <div class="category-products">
+        <div class="category-products-header">
+            {% if active_category %}
+                <div>
+                    <p class="section-kicker">Catégorie</p>
+                    <h2>{{ active_category.name }}</h2>
+                </div>
+            {% else %}
+                <div>
+                    <p class="section-kicker">Boutique</p>
+                    <h2>Tous les produits</h2>
+                </div>
+            {% endif %}
+        </div>
+
+        <section class="products-grid">
+            {% for product in products %}
+                <article class="product-card">
+                    <a href="{% url 'produit_detail' product.pk %}">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="product-image-placeholder">
+                                <span>Aucune image</span>
+                            </div>
+                        {% endif %}
+                    </a>
+
+                    <div class="product-card-body">
+                        <p class="product-category">{{ product.category.name }}</p>
+
+                        <h2>
+                            <a href="{% url 'produit_detail' product.pk %}">
+                                {{ product.name }}
+                            </a>
+                        </h2>
+
+                        <p class="product-description">
+                            {{ product.description|truncatewords:14 }}
+                        </p>
+
+                        <div class="product-bottom">
+                            <p class="product-price">{{ product.price }} FCFA</p>
+
+                            {% if product.stock > 0 and product.is_available %}
+                                <span class="product-stock">En stock</span>
+                            {% else %}
+                                <span class="product-out">Rupture</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+            {% empty %}
+                <div class="empty-products">
+                    <h2>Aucun produit trouvé</h2>
+                    <p>Aucun produit n’est disponible dans cette catégorie pour le moment.</p>
+                </div>
+            {% endfor %}
+        </section>
+    </div>
+
+</section>
+
+{% endblock %}

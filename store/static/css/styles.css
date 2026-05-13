@@ -395,6 +395,7 @@ main {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-5);
+    padding-bottom: 15px;
 }
 
 .product-card {
@@ -1311,5 +1312,118 @@ footer {
     .success-actions .btn,
     .success-actions .btn-secondary {
         width: 100%;
+    }
+}
+
+/* Categories page */
+.category-page-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+.category-sidebar {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 22px;
+    box-shadow: var(--shadow-soft);
+    position: sticky;
+    top: 95px;
+}
+
+.category-sidebar h2 {
+    margin: 0 0 18px;
+    color: var(--dark);
+    font-size: 22px;
+}
+
+.sidebar-category-link {
+    display: block;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    border-radius: 14px;
+    font-weight: 900;
+    color: var(--dark-soft);
+    background: #f9fafb;
+    border: 1px solid var(--border);
+}
+
+.sidebar-category-link:hover {
+    color: var(--blue);
+    border-color: var(--blue);
+    background: white;
+}
+
+.sidebar-category-link.active {
+    background: var(--blue);
+    color: white;
+    border-color: var(--blue);
+}
+
+.category-products {
+    min-width: 0;
+}
+
+.category-products-header {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 22px;
+    box-shadow: var(--shadow-soft);
+}
+
+.category-products-header h2 {
+    margin: 0;
+    font-size: 30px;
+    color: var(--dark);
+    letter-spacing: -1px;
+}
+
+.empty-text {
+    color: var(--muted);
+    margin: 0;
+}
+
+.empty-products {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 35px;
+    box-shadow: var(--shadow-soft);
+}
+
+.empty-products h2 {
+    margin: 0 0 8px;
+    color: var(--dark);
+}
+
+.empty-products p {
+    margin: 0;
+    color: var(--muted);
+}
+
+@media (max-width: 900px) {
+    .category-page-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .category-sidebar {
+        position: static;
+    }
+}
+
+@media (max-width: 650px) {
+    .category-sidebar,
+    .category-products-header,
+    .empty-products {
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    .category-products-header h2 {
+        font-size: 26px;
     }
 }

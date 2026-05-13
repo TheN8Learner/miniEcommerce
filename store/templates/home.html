@@ -29,7 +29,7 @@
     <div class="hero-card">
         <p class="hero-card-label">Produit populaire</p>
 
-        {% for product in featured_products %}
+        {% for product in popular_products %}
             {% if product.image %}
                 <img src="{{ product.image.url }}" alt="{{ product.name }}">
             {% endif %}
@@ -40,14 +40,23 @@
             <a href="{% url 'produit_detail' product.pk %}" class="hero-card-link">
                 Voir le produit
             </a>
+        {% empty %}
+            <div class="hero-placeholder">
+                <span>Aucun produit populaire</span>
+            </div>
         {% endfor %}
     </div>
 </section>
 
 <section class="section-heading">
     <div>
-        <p class="section-kicker">Produits</p>
-        <h2>Produits récents</h2>
+        <p class="section-kicker">Boutique</p>
+
+        {% if active_category %}
+            <h2>{{ active_category.name }}</h2>
+        {% else %}
+            <h2>Tous les produits</h2>
+        {% endif %}
     </div>
 
     <a href="{% url 'store' %}">Tout voir</a>
@@ -55,6 +64,59 @@
 
 <section class="products-grid">
     {% for product in latest_products %}
+        <article class="product-card">
+            <a href="{% url 'produit_detail' product.pk %}">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                    <div class="product-image-placeholder">
+                        <span>Aucune image</span>
+                    </div>
+                {% endif %}
+            </a>
+
+            <div class="product-card-body">
+                <p class="product-category">{{ product.category.name }}</p>
+
+                <h2>
+                    <a href="{% url 'produit_detail' product.pk %}">
+                        {{ product.name }}
+                    </a>
+                </h2>
+
+                <p class="product-description">
+                    {{ product.description|truncatewords:14 }}
+                </p>
+
+                <div class="product-bottom">
+                    <p class="product-price">{{ product.price }} FCFA</p>
+
+                    {% if product.stock > 0 and product.is_available %}
+                        <span class="product-stock">En stock</span>
+                    {% else %}
+                        <span class="product-out">Rupture</span>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+    {% empty %}
+        <p>Aucun produit disponible pour le moment.</p>
+    {% endfor %}
+</section>
+
+<section class="section-heading">
+    <div>
+        
+        {% if active_category %}
+            <h2>{{ active_category.name }}</h2>
+        {% else %}
+            <h2>Produits mis en avant</h2>
+        {% endif %}
+    </div>
+</section>
+
+<section class="products-grid">
+    {% for product in featured_products %}
         <article class="product-card">
             <a href="{% url 'produit_detail' product.pk %}">
                 {% if product.image %}

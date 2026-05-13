@@ -1,14 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages, sessions
-from .models import Product, Order, OrderItem
+from .models import Product, Order, OrderItem, Category
 from .forms import quantityForm, checkoutForm
 
 # Create your views here.
 def home(request):
     latest_products = Product.objects.all().order_by("-created_at")
+    popular_products = Product.objects.filter(is_featured=True).order_by("-created_at")[:1]
     featured_products = Product.objects.filter(is_featured=True).order_by("-created_at")
     return render(request, 'home.html', {
         "latest_products": latest_products,
+        "popular_products": popular_products,
         "featured_products": featured_products
     })
 
@@ -201,7 +203,30 @@ def checkout_success(request):
     request.session.modified = True
     return render(request, 'checkout_success.html')
 
+def products_by_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    products = Product.objects.filter(category=category)
 
+    categories = Category.objects.all()
+
+    if category:
+        active_category = category
+    else:
+        active_category = None
+    return render(request, 'categories.html', {
+        "products": products,
+        "categories": categories,
+        "active_category": active_category
+        })
+
+def categories(request):
+    products = Product.objects.all()
+    categories = Category.objects.all()
+
+    return render(request, 'categories.html', {
+        "products": products,
+        "categories": categories,
+        })
 
 
 
