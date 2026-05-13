@@ -4,6 +4,14 @@ from .models import Product, Order, OrderItem
 from .forms import quantityForm, checkoutForm
 
 # Create your views here.
+def home(request):
+    latest_products = Product.objects.all().order_by("-created_at")
+    featured_products = Product.objects.filter(is_featured=True).order_by("-created_at")
+    return render(request, 'home.html', {
+        "latest_products": latest_products,
+        "featured_products": featured_products
+    })
+
 
 def store(request):
     products = Product.objects.all().order_by("-created_at")

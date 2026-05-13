@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}MyShop - Boutique en ligne{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="hero-content">
+        <p class="hero-badge">Nouvelle collection disponible</p>
+
+        <h1>Des produits simples, utiles et de qualité.</h1>
+
+        <p class="hero-text">
+            Découvrez notre sélection de produits avec une commande rapide,
+            un panier simple et un checkout facile.
+        </p>
+
+        <div class="hero-actions">
+            <a href="{% url 'store' %}" class="btn btn-dark">
+                Voir la boutique
+            </a>
+
+            <a href="{% url 'cart' %}" class="btn btn-light">
+                Voir mon panier
+            </a>
+        </div>
+    </div>
+
+    <div class="hero-card">
+        <p class="hero-card-label">Produit populaire</p>
+
+        {% for product in featured_products %}
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% endif %}
+
+            <h2>{{ product.name }}</h2>
+            <p>{{ product.price }} FCFA</p>
+
+            <a href="{% url 'produit_detail' product.pk %}" class="hero-card-link">
+                Voir le produit
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section-heading">
+    <div>
+        <p class="section-kicker">Produits</p>
+        <h2>Produits récents</h2>
+    </div>
+
+    <a href="{% url 'store' %}">Tout voir</a>
+</section>
+
+<section class="products-grid">
+    {% for product in latest_products %}
+        <article class="product-card">
+            <a href="{% url 'produit_detail' product.pk %}">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                    <div class="product-image-placeholder">
+                        <span>Aucune image</span>
+                    </div>
+                {% endif %}
+            </a>
+
+            <div class="product-card-body">
+                <p class="product-category">{{ product.category.name }}</p>
+
+                <h2>
+                    <a href="{% url 'produit_detail' product.pk %}">
+                        {{ product.name }}
+                    </a>
+                </h2>
+
+                <p class="product-description">
+                    {{ product.description|truncatewords:14 }}
+                </p>
+
+                <div class="product-bottom">
+                    <p class="product-price">{{ product.price }} FCFA</p>
+
+                    {% if product.stock > 0 and product.is_available %}
+                        <span class="product-stock">En stock</span>
+                    {% else %}
+                        <span class="product-out">Rupture</span>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+    {% empty %}
+        <p>Aucun produit disponible pour le moment.</p>
+    {% endfor %}
+</section>
+
+<section class="features">
+    <article>
+        <h3>Commande simple</h3>
+        <p>Ajoutez vos produits au panier et passez commande rapidement.</p>
+    </article>
+
+    <article>
+        <h3>Produits suivis</h3>
+        <p>Le stock est mis à jour automatiquement après chaque commande.</p>
+    </article>
+
+    <article>
+        <h3>Support client</h3>
+        <p>Nous vous contactons après la commande pour confirmer la livraison.</p>
+    </article>
+</section>
+
+{% endblock %}

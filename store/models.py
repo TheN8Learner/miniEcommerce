@@ -16,6 +16,7 @@ class Product(models.Model):
     image = models.ImageField(blank=True, null=True)
     stock = models.IntegerField()
     is_available = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -27,16 +28,6 @@ class Quantity(models.Model):
 
     def __str__(self):
         return self.quantity
-
-class ContactForm(models.Model):
-    fullname = models.CharField(max_length=200)
-    email = models.EmailField()
-    phone = models.CharField()
-    address = models.CharField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.fullname
 
 class Order(models.Model):
     STATUS_CHOICES = [
